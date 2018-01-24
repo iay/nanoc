@@ -112,14 +112,14 @@ module Nanoc::Helpers
         xml.instruct!
         xml.feed(xmlns: 'http://www.w3.org/2005/Atom', 'xml:base' => root_url) do
           # Add primary attributes
-          xml.id id
+          xml.id(id || root_url)
           xml.title title
 
           # Add date
           xml.updated(updated.__nanoc_to_iso8601_time)
 
           # Add links
-          xml.link(rel: 'alternate', href: alt_link)
+          xml.link(rel: 'alternate', href: (alt_link || root_url))
           xml.link(rel: 'self',      href: feed_url)
 
           # Add author information
@@ -193,8 +193,8 @@ module Nanoc::Helpers
       builder = AtomFeedBuilder.new(@config, @item)
 
       # Fill builder
-      builder.alt_link          = params[:alt_link] || @config[:base_url] + '/'
-      builder.id                = params[:id] || @config[:base_url] + '/'
+      builder.alt_link          = params[:alt_link]
+      builder.id                = params[:id]
       builder.limit             = params[:limit] || 5
       builder.relevant_articles = params[:articles] || articles || []
       builder.preserve_order    = params.fetch(:preserve_order, false)
