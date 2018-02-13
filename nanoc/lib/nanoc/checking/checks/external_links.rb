@@ -47,6 +47,8 @@ module ::Nanoc::Checking::Checks
         url = URI.parse(href)
       rescue URI::Error
         return Result.new(href, 'invalid URI')
+      rescue Timeout::Error
+        return Result.new(href, 'execution expired in parse')
       end
 
       # Skip excluded URLs
